@@ -3,7 +3,8 @@ const router = express.Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
-const validation = require("../middlewear/validation")
+const validation = require("../middlewear/validation");
+const authorization = require("../middlewear/authorization");
 
 //registering
 
@@ -72,6 +73,15 @@ router.post("/login", validation, async (req, res) => {
         res.json({ accessToken });
 
 
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).send(`Internal error.`)  
+    }
+});
+
+router.get("/is-verify", authorization, async(req, res) => {
+    try {
+        res.json(true);
     } catch (error) {
         console.log(error.message)
         return res.status(500).send(`Internal error.`)  
