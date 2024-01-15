@@ -16,6 +16,11 @@ router.post("/register", async (req, res) => {
             return res.status(400).send(`All fields are required`);
         }
 
+        //3. password must be at least 8 characters long
+        if (password.length < 8) {
+            return res.status(400).send(`Password must be at least 8 characters long`);
+        }
+
         //3. check if the user exists via email
         const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [email]);
 
