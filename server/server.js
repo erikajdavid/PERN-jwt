@@ -12,6 +12,10 @@ app.use(express.json()); //req.body (access client side data)
 
 //ROUTES
 
+//register and login routes
+
+app.use("/auth", require("./routes/jwtAuth"));
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
