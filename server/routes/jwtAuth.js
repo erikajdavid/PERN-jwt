@@ -51,4 +51,45 @@ router.post("/register", async (req, res) => {
     }
 });
 
+//logging in
+
+router.post("/login", async (req, res) => {
+    try {
+        //1. destructure the req.body
+        const { email, password } = req.body;
+
+        //2. check that all input fields are filled
+        if (!email || !password) {
+            return res.status(400).send(`All input fields are required`);
+        }
+
+        //3. checek that user exists
+        const existingUser = await pool.query("SELECT * FROM users WHERE user_email = $1", [email]);
+
+        //if user does not exist, throw an error
+        if (existingUser.rows.length === 0) {
+            return res.status(401).json({ message: `Wrong email or password.` });
+        }
+
+        //4. if the user exists, compare password with bcrypt password
+        const passwordCorrect = await bcrypt.compare(password, existingUser.rows[0].user_password);
+
+        if (!passwordCorrect) {
+            return res.status(401).json({ message: `Unauthorized.` })
+        }
+        
+        console.log(passwordCorrect);
+
+        //5. if password is correct, generator access token upon sucessful login
+        const accessToken = jwtGenerator(existingUser.rows[0].user_id);
+
+        res.json({ accessToken });
+
+
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).send(`Internal error.`)  
+    }
+});
+
 module.exports = router;
