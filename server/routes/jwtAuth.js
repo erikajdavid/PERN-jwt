@@ -31,9 +31,9 @@ router.post("/register", async (req, res) => {
         
         //5. enter the new user into our pernjwt database
 
-        const newUser = await pool.query("INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3)", [name, email, bcryptPassword]);
+        const newUser = await pool.query("INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3) RETURNING *", [name, email, bcryptPassword]);
 
-        res.json(newUser);
+        res.json(newUser.rows[0]);
         
     } catch (err) {
         console.error(err.message);
