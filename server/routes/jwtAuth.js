@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const bcrypt = require("bcrypt");
 
 //registering
 
@@ -21,10 +22,20 @@ router.post("/register", async (req, res) => {
         if (user.rows[0]) {
             return res.status(401).send(`User already exists.`);
         }
+
+        //4. if user doesn't exist, continue with the process and crypt the password
+        const saltRound = 10; //this makes the encryption stronger
+        const salt = await bcrypt.genSalt(saltRound);
+
+        const bcryptPassword = await bcrypt.hash(password, salt);
         
-        //if user doesn't exist, continue with the process
+        //5. enter the new user into our pernjwt database
+
+        const newUser = await pool.query("INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3)", [name, email, bcryptPassword]);
+
+        res.json(newUser);
         
-    } catch (error) {
+    } catch (err) {
         console.error(err.message);
         res.status(500).send(`Server error.`);
     }
