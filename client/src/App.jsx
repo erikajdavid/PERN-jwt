@@ -7,6 +7,7 @@ import Register from './components/Register';
 function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
@@ -25,12 +26,18 @@ function App() {
       
     } catch (error) {
         console.error(error.message);
-    }
-  }
+    } finally {
+        setLoading(false); // Set loading to false after the authentication check
+      }
+  };
 
   useEffect(() => {
     isAuth()
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
