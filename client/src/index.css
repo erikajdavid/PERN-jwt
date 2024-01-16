@@ -66,3 +66,14 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+input {
+  margin-bottom: 20px;
+  padding: 10px;
+}
