@@ -1,15 +1,46 @@
 import React, { useState } from "react";
 
-const Register = () => {
+const Register = ({ setAuth }) => {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const onSubmitForm = async (e) => {
+        e.preventDefault();
+
+        try {
+            const body = {
+                email,
+                password,
+                name
+            }; 
+
+            const response = await fetch("http://localhost:5000/auth/register", {
+                method: "POST",
+                headers: { "Content-type" : "application/json"},
+                body: JSON.stringify(body)
+            });
+
+            const parseResponse = await response.json();
+            
+            console.log(parseResponse);
+
+            //if successful, you'll get an access token. save it in local storage. 
+
+            localStorage.setItem("token", parseResponse.accessToken);
+
+            setAuth(true);
+            
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
     return (
         <>
             <h1>Register</h1>
-            <form>
+            <form onSubmit={onSubmitForm}>
                 <label htmlFor="name"></label>
                 <input 
                     type="text"
