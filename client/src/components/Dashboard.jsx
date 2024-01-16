@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Dashboard = () => {
+const Dashboard = ({ setAuth }) => {
 
     const [name, setName] = useState("");
 
@@ -24,12 +24,22 @@ const Dashboard = () => {
 
     useEffect(() => {
         getName()
-    }, [])
+    }, []);
+
+
+    const onClickLogout = (e) => {
+        e.preventDefault();
+
+        localStorage.removeItem("token");
+        setAuth(false);
+    };
+
 
     return (
         <>
             <h1>Dashboard</h1>
             <p>Welcome, {name}!</p>
+            <button onClick={(e) => onClickLogout(e)}>Log out</button>
         </>
     );
 
