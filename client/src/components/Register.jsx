@@ -63,7 +63,6 @@ const Register = ({ setAuth }) => {
                     required
                 />
 
-
                 <label htmlFor="password"></label>
                 <input 
                     type="password"
@@ -74,7 +73,8 @@ const Register = ({ setAuth }) => {
                     placeholder="Password:"
                     required
                 />
-                <button>Register for an account.</button>
+
+                <button>Register for an account</button>
             </form>
         </>
     );
